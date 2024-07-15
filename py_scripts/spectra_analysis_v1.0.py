@@ -10,28 +10,28 @@ import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 import scipy.stats as spstat
 
-#Initialise variables
+#Initialize variables
 # GENERAL ########################################################################
 directory = "spectra" #must contain only homogeneous TXT comma-separated files
 pca_components = 2 #number of PCA components to use
-wn_start = 1000
-wn_end = 3400
-colorscale = mpl.colormaps['rainbow'].resampled(40) #color scale for categorising scatter points
+wn_start = 0 #wavenmuber starting point
+wn_end = 4000 #wavenumber ending point
+colorscale = mpl.colormaps['rainbow'].resampled(40) #color scale for categorizing scatter points
 shift_correction = False
 shift_correction_region = [3800,4000]
 scale_correction = True
 scale_correction_region = [2330,2380]
 
 # SPECTRA COMPARE ################################################################
-plot_compare = True
-compare = ['1S','4S']
+plot_compare = True #plot spectra comparison
+compare = ['1S','4S'] #the groups of spectra to compare
 colors = ['r','g']
 
 # PCA PLOTTING ###################################################################
-cpn = 5000 #density of plotting grid for kmean clustering
+cpn = 5000 #density of plotting grid for k-mean clustering
 plot_pca = False #plot PCA component-space distribution
-plot_cluster = False #whether or not to plot clusters
-plot_text_labels = False
+plot_cluster = False #whether or not to plot k-mean clusters
+plot_text_labels = False 
 
 # MORPH VS PCA PLOTTING ##########################################################
 plot_morph_vs_pca = False #plot morphological characteristic against first PCA component
@@ -51,8 +51,8 @@ plot_morph_pca = False #carry out PCA analysis of the morphological score
 morph_pca_cats = ['luster', 'glume impressions', 'cracks', 'endosperm expansion', 'VF visibility', 'shape'] #categories to include in morphological PCA analysis
 morph_pca_components_B = 4 #numher of components to output in PCA fitting
 morph_pca_components_S = 4
-chem_pca_plot_component = 0 #which chemical PCA component to plot
-morph_pca_plot_component = 0 #which morph PCA component to plot
+chem_pca_plot_component = 0 #which spectral PCA component to plot (0 = first, 1 = second)
+morph_pca_plot_component = 0 #which morphological PCA component to plot
 
 ##################################################################################
 
@@ -92,7 +92,7 @@ all_spec_B = np.array(all_spec_B)
 all_spec_S = np.array(all_spec_S)
 print("[INFO] Finished reading in spectrum data.")
 
-#Shift spectra so that selected region is at zero
+#Shift spectra so that selected region is at zero (NOT USED FOR THIS THESIS, BUT MAY BE HELPFUL)
 if shift_correction:
     shc_range_args = np.argwhere(np.logical_and(np.greater(wns,shift_correction_region[0]),np.less(wns,shift_correction_region[1])))
     shc_start_arg = shc_range_args[0][0]
@@ -141,6 +141,8 @@ morph_sum_S = (morph_sum_S-np.min(morph_sum_S))/(np.max(morph_sum_S)-np.min(morp
 wn_range_args = np.argwhere(np.logical_and(np.greater(wns,wn_start),np.less(wns,wn_end)))
 wn_start_arg = wn_range_args[0][0]
 wn_end_arg = wn_range_args[-1][0]
+
+##################################################################################
 
 #Perform PCA
 pca_B = PCA(n_components=pca_components)
@@ -402,7 +404,7 @@ if plot_morph_pca:
     morph_B_scores_transform = morph_PCA_B.transform(morph_B_scores)
     morph_S_scores_transform = morph_PCA_S.transform(morph_S_scores)
 
-    #Plot morph PCA vs chem PCA
+    #Plot morph PCA vs spec PCA
     fig,axs = plt.subplots(2,2)
     fig.tight_layout()
     fig.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.5, hspace=0.5)
