@@ -1,14 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[30]:
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 # read in data from the .txt file
-filename = "/Users/daniellesicotte/Library/Mobile Documents/com~apple~CloudDocs/Cambridge/MPhil Thesis/DATA/NIR/NIR_Abs/4S.16.txt" #must contain only homogeneous TXT comma-separated files
+filename = "..." #must contain only homogeneous TXT comma-separated files
 #data = np.loadtxt(directory)
 
 with open(filename,'r') as f:
@@ -32,18 +26,6 @@ plt.title('4S.16 NIR Spectrum')
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Reflectance')
 
-plt.savefig("/Users/daniellesicotte/Library/Mobile Documents/com~apple~CloudDocs/Cambridge/MPhil Thesis/DATA/NIR/NIR_Specs/4S.16.png",dpi=300,bbox_inches='tight')
+plt.savefig("...",dpi=300,bbox_inches='tight')
 plt.show()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
