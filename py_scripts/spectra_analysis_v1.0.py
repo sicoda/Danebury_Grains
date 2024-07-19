@@ -12,15 +12,16 @@ import scipy.stats as spstat
 
 #Initialize variables
 # GENERAL ########################################################################
-directory = "spectra" #must contain only homogeneous TXT comma-separated files
+directory = "..." #must contain only homogeneous TXT comma-separated files
 pca_components = 2 #number of PCA components to use
 wn_start = 0 #wavenmuber starting point
 wn_end = 4000 #wavenumber ending point
 colorscale = mpl.colormaps['rainbow'].resampled(40) #color scale for categorizing scatter points
-shift_correction = False
-shift_correction_region = [3800,4000]
-scale_correction = True
-scale_correction_region = [2330,2380]
+
+shift_correction = False #(THIS WAS NOT USED FOR THIS THESIS, BUT MAY BE HELPFUL)
+shift_correction_region = [0,4000]
+scale_correction = False
+scale_correction_region = [0,4000]
 
 # SPECTRA COMPARE ################################################################
 plot_compare = True #plot spectra comparison
@@ -122,8 +123,12 @@ if scale_correction:
     all_spec_B = np.swapaxes(all_spec_B,0,1)
     all_spec_S = np.swapaxes(all_spec_S,0,1)
 
+##################################################################################
+
 #Read in morphology data
-morph = pd.read_excel("morphology.xlsx",sheet_name="Barley",header=0,index_col=0)
+morph = pd.read_excel("...",sheet_name="...",header=0,index_col=0)
+
+##################################################################################
 
 ##Get morph sum values
 #Read in and store
@@ -141,8 +146,6 @@ morph_sum_S = (morph_sum_S-np.min(morph_sum_S))/(np.max(morph_sum_S)-np.min(morp
 wn_range_args = np.argwhere(np.logical_and(np.greater(wns,wn_start),np.less(wns,wn_end)))
 wn_start_arg = wn_range_args[0][0]
 wn_end_arg = wn_range_args[-1][0]
-
-##################################################################################
 
 #Perform PCA
 pca_B = PCA(n_components=pca_components)
@@ -206,8 +209,12 @@ if plot_compare:
 
     plt.xlim((4000,400))
 
-    plt.savefig("Spectra_Compare_%s_%s.png"%(compare[0],compare[1]),dpi=300,bbox_inches='tight')
+##################################################################################
+
+    plt.savefig(".../Spectra_Compare_%s_%s.png"%(compare[0],compare[1]),dpi=300,bbox_inches='tight')
     plt.show()
+
+##################################################################################
 
 ##Perform k-means cluster fit
 if plot_cluster:
@@ -262,11 +269,16 @@ if plot_pca:
         if plot_text_labels: axs[1].text(transf_spec_S[i,0],transf_spec_S[i,1],sample_id,fontsize='xx-small')
     axs[1].set_xlabel("Component S1")
     axs[1].set_ylabel("Component S2")
+
+ ##################################################################################
+    
     if plot_cluster:
-        plt.savefig("PCA_distribution_clustering_%s_%s.png"%(str(wn_start),str(wn_end)), dpi=300, bbox_inches='tight')
+        plt.savefig(".../PCA_distribution_clustering_%s_%s.png"%(str(wn_start),str(wn_end)), dpi=300, bbox_inches='tight')
     else:
-        plt.savefig("PCA_distribution_%s_%s.png"%(str(wn_start),str(wn_end)), dpi=300, bbox_inches='tight')
+        plt.savefig(".../PCA_distribution_%s_%s.png"%(str(wn_start),str(wn_end)), dpi=300, bbox_inches='tight')
     plt.show()
+
+##################################################################################
 
     comp_B = pca_B.components_
     comp_S = pca_S.components_
@@ -375,9 +387,13 @@ if plot_morph_vs_pca:
         axs[1].plot(mvp_S_x_opt,mvp_S_y_opt,c='r',linestyle='--')
         #axs[0].fill_between(mvp_B_x_opt,mvp_B_y_lower,mvp_B_y_upper,alpha=0.5,color='g')
         #axs[1].fill_between(mvp_S_x_opt,mvp_S_y_lower,mvp_S_y_upper,alpha=0.5,color='g')
+
+##################################################################################
         
-    plt.savefig("PCA_morphology_comparison_%s.png"%(morph_category))
+    plt.savefig(".../PCA_morphology_comparison_%s.png"%(morph_category))
     plt.show()
+
+##################################################################################
 
 if plot_morph_pca:
     ##Perform morph PCA
@@ -421,7 +437,11 @@ if plot_morph_pca:
     axs[1,0].set_ylabel("B_Morph Comp Coeff")
     axs[1,1].set_ylabel("S_Morph Comp Coeff")
 
-    plt.savefig("PCA_morphology_comparison_%s.png"%(morph_category), bbox_inches='tight')
+##################################################################################
+
+    plt.savefig(".../PCA_morphology_comparison_%s.png"%(morph_category), bbox_inches='tight')
+
+##################################################################################
 
     plt.show()
 
